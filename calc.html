@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <style>
+  body { 
+    height: 100%; 
+    background: url("graphic_paper.png");
+  }
+  .container { 
+    display: block; 
+    position:absolute;
+    height:310px;
+    width: 661px;
+    bottom:0;
+    top:0;
+    left:0;
+    right:0; 
+   }
+  #calculation_form { 
+    position:absolute; 
+    top:50%; 
+    width: 661px; 
+    height:310px; 
+    margin: 0 auto; 
+  }
+  </style>
+</head>
+<body>
+<div class="container">
+<form id="calculation_form" method="post" class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label">Αμοιβή</label>
+    <div class="controls">
+      <div class="input-prepend">
+        <span class="add-on">&euro;</span>
+        <input type="number" id="fee" name="fee" placeholder="Αμοιβή υπηρεσίας">
+      </div>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <label class="control-label">Φόρος</label>
+    <div class="controls">
+      <div class="input-prepend">
+        <span class="add-on">&euro;</span>
+        <input type="number" id="tax" name="tax" placeholder="Φόρος">
+      </div>
+      <span class="help-block">Φόρος που παρακρατείται από τον πελάτη κι αποδίδεται στο δημόσιο.</span>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <label class="control-label">Φ.Π.Α.</label>
+    <div class="controls">
+      <div class="input-prepend">
+        <span class="add-on">&euro;</span>
+        <input type="number" id="vat" name="vat" placeholder="Φ.Π.Α.">
+      </div>
+      <span class="help-block"><abbr title="Φόρος Προστιθέμενης Αξίας">Φ.Π.Α.</abbr> που παρακρατείται από τον επαγγελματία κι αποδίδεται στο δημόσιο.</span>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <label class="control-label">Πληρωτέο</label>
+    <div class="controls">
+      <div class="input-prepend">
+        <span class="add-on">&euro;</span>
+        <input type="number" id="total" name="total" placeholder="Πληρωτέο από τον πελάτη">
+      </div>
+      <span class="help-block">Τελικό πληρωτέο από τον πελάτη στον επαγγελματία.</span>
+    </div>
+  </div>
+
+  <button type="submit" class="btn">Submit</button>
+  </fieldset>
+</form>
+</div>
+  <!-- javascript -->
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+  $(document).ready( function() {
+    $("button").hide();
+    var tax_percentage = 0.20;
+    var vat_percentage = 0.23;
+
+    function calc_and_update(fee){
+      var tax = fee*tax_percentage;
+      var vat = fee*vat_percentage;
+      var total = fee - tax + vat;
+      $("#fee").val(fee.toFixed(2));
+      $("#tax").val(tax.toFixed(2));
+      $("#vat").val(vat.toFixed(2));
+      $("#total").val(total.toFixed(2));
+    }
+    
+    $("#fee").blur( function() {
+      if( $("#fee").val() != "" )
+        calc_and_update(Number($("#fee").val()));
+    });
+    $("#tax").blur( function() {
+      if( $("#tax").val() != "" )
+        var tax = Number($("#tax").val());
+      var fee = tax/tax_percentage;
+      calc_and_update(fee);
+    });
+    $("#vat").blur( function() {
+      if( $("#vat").val() != "" )
+        var vat = Number($("#vat").val());
+      var fee = vat/vat_percentage;
+      calc_and_update(fee);
+    });
+    $("#total").blur( function() {
+      if( $("#total").val() != "" )
+      var fee = Number($("#total").val())*100/103;
+      calc_and_update(fee);
+    });
+  });
+  </script>
+  <!-- end javascript -->
+</body>
+</html>
